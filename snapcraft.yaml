@@ -1,0 +1,38 @@
+name: dropwatch
+summary:  tool to diagnose where packets are getting dropped.
+description: |
+  dropwatch is an utility to interface to the kernel to monitor for dropped
+  network packets.
+base: core20
+architectures:
+  - build-on: amd64
+confinement: classic
+grade: devel
+version: v1.0
+apps:
+  dropwatch:
+    command: ./dropwatch
+parts:
+  dropwatch:
+    plugin: autotools
+    source: https://github.com/nhorman/dropwatch.git
+    source-branch: master
+    override-build: |
+      ./autogen.sh
+      ./configure
+      make 
+      make install
+      cp src/dropwatch $SNAPCRAFT_PART_INSTALL
+    build-packages:
+      - binutils-dev
+      - pkg-config
+      - libreadline-dev
+      - libnl-3-dev
+      - libnl-genl-3-dev
+      - libpcap0.8-dev
+    stage-packages:
+      - libnl-3-200
+      - libreadline8
+      - libnl-genl-3-200
+      - libpcap0.8
+      - libbinutils
